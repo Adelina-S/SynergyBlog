@@ -72,6 +72,7 @@ namespace WebBlog.Controllers
             }
             return Redirect("/Home/Login");
         }
+        //Регистрация нового пользователя
         [HttpGet]
         public IActionResult Register()
         {
