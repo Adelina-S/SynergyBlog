@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "/Views/Shared/LayoutEmpty.cshtml";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Авторизация</h1>
+</div>
+<form method='post' class="text-center">
+    <p>
+        <label>Введите Логин</label><br />
+        <input name='login' required />
+    </p>
+    <p>
+        <label>Введите Пароль</label><br />
+        <input type='password' name='password' required />
+    </p>
+    <input type='submit' value='Войти' />
+    <input type="button" value="Зарегистрироваться" onclick="document.location='/Home/Register'" />
+</form>
+<script>
+
+</script>

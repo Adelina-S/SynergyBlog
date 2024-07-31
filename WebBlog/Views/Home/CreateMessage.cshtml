@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<div class="text-center">
+    <h1 class="display-4">Создание нового поста</h1>
+</div>
+<form method='post' class="text-center">
+<div class="text-center">
+        <textarea name="Title" cols="60" rows="1" placeholder="Заголовок" required></textarea>
+</div>
+<br>
+<div class="text-center">
+    <textarea name="Text" cols="60" rows="5" placeholder="Текст" required></textarea>
+</div>
+<div class="text-center">
+    <label>Скрытый</label>
+    <input type="checkbox" name="IsHidden"/>
+</div>
+<br>
+<div class="text-center">
+    <input type="submit" value='Создать'/>
+</div>
+</form>
