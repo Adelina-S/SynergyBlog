@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Результаты поиска</h1>
+</div>
+@if (string.IsNullOrEmpty(ViewData["filterUser"] as string) == false)
+{
+    <div class="text-left">
+        <label>@($"Пользователи: {ViewData["filterUser"]}")</label>
+    </div>
+}
+@if (string.IsNullOrEmpty(ViewData["filterTags"] as string) == false)
+{
+    <div class="text-left">
+        <label>@($"Тэги: {ViewData["filterTags"]}")</label>
+    </div>
+}
+<div id="postList">
+</div>
+<input type="hidden" id="filterUser" value="@ViewData["filterUser"]"/>
+<input type="hidden" id="filterTags" value="@ViewData["filterTags"]"/>
+<div id="nextPage" class="text-center">
+    <button type="button" onclick="ShowFilter()">Загрузить ещё</button>
+</div>
+<script>
+    var page = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+        ShowFilter();
+    }, false);
+</script>

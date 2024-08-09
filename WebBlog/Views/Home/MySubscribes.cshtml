@@ -1,20 +1,17 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
     Layout = "/Views/Shared/_Layout.cshtml";
 }
-
 <div class="text-center">
-    <h1 class="display-4">Главная страница</h1>
+    <h1 class="display-4">Мои подписки</h1>
 </div>
-<div id="postList">
-        
+<div id="subscribeList">
 </div>
 <div id="nextPage" class="text-center">
-    <button type="button" onclick="ShowPosts()">Загрузить ещё</button>
+    <button type="button" onclick="ShowMySubscribes()">Загрузить ещё</button>
 </div>
 <script>
     var page = 0;
     document.addEventListener('DOMContentLoaded', function () {
-        ShowPosts();
+        ShowMySubscribes();
     }, false);
 </script>

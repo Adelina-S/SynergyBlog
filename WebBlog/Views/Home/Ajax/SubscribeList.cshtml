@@ -1,0 +1,37 @@
+﻿@{
+    Layout = null;
+}
+@model List<UserWithMessage>
+@{
+    foreach (var um in Model)
+    {
+        <div class="text-left message">
+            <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">@um.User.Name</a>
+            @if (um.Message!=null)
+            {
+            <label>@um.Message.CreateDate.ToString("dd.MM.yyyy HH:mm")</label>
+            <br />
+            <label class="fw-bold fs-3" onclick="@($"document.location='/Home/Message?id={um.Message.Id}'")">@um.Message.Title</label>
+            <br />
+            <label class="message-text-short" onclick="@($"document.location='/Home/Message?id={um.Message.Id}'")">@um.Message.Text</label>
+            <br />
+                <label class="fw-light fw-italic">Тэги: </label>
+                @foreach (var tag in um.Message.Tags)
+                {
+                    <a>@($"#{tag.Name}")</a>
+                }
+            <br />
+            <img src="/images/comment.png" />
+            <label class="text-dark text-decoration-underline" onclick="@($"document.location='/Home/Message?id={um.Message.Id}'")"> @($"Комментарии ({um.Message.Comments.Count})") </label>
+            <img src="/images/subscribe.png" />
+            <label class="text-dark text-decoration-underline" onclick="UnSubscribe(this, @um.Message.Id)"> Отписаться от автора </label>
+            }
+            else
+            {
+                <label>У автора нет сообщений</label>
+            }
+                
+            
+        </div>
+    }
+}

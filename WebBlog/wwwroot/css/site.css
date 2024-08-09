@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  background-color:lightgray;
 }
 
 @media (min-width: 768px) {
@@ -18,5 +19,24 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: lightgray;
+}
+.message {
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+.message-text {
+    white-space: pre-wrap;
+}
+.message-text-short {
+    white-space: pre-wrap;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+/*Пробелы между ссылками, используется в тэгах*/
+a + a {
+    margin-left: 5px;
 }

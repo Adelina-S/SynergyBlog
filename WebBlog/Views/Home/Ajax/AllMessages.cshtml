@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+@model List<Message>
+@{
+    foreach (var message in Model)
+    {
+        <div class="text-left message">
+            <a class="text-dark" href="@($"/Home/Filter?filterUser={message.User.Name}&filterTags=")">@message.User.Name</a>
+            <label>@message.CreateDate.ToString("dd.MM.yyyy HH:mm")</label>
+            <br />
+            <label class="fw-bold fs-3" onclick="@($"document.location='/Home/Message?id={message.Id}'")">@message.Title</label>
+            <br />
+            <label class="message-text-short" onclick="@($"document.location='/Home/Message?id={message.Id}'")">@message.Text</label>
+            <br />
+            <label class="fw-light fw-italic">Тэги: </label>
+            @foreach (var tag in message.Tags)
+            {
+                <a class="text-dark" href="@($"/Home/Filter?filterUser=&filterTags={tag.Name}")">@($"#{tag.Name}")</a>
+            }
+            <br />
+            <img src="/images/comment.png"/>
+            <label class="text-dark text-decoration-underline" onclick="@($"document.location='/Home/Message?id={message.Id}'")"> @($"Комментарии ({message.Comments.Count})") </label>
+            @if (message.IsSelfMessage)
+            {
+                <img src="/images/redact.png" />
+                <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Редактировать</a>
+                <img src="/images/delete.png" />
+                <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Удалить</a>
+            }
+            else
+            {
+                <img src="/images/subscribe.png" />
+                @if (message.IsHaveSubscribe)
+                {
+                    <label class="text-dark text-decoration-underline" onclick="UnSubscribe(this, @message.Id)"> Отписаться от автора </label>
+                }
+                else
+                {
+                    <label class="text-dark text-decoration-underline" onclick="Subscribe(this, @message.Id)"> Подписаться на автора </label>
+                }
+            }
+        </div>
+    }
+}

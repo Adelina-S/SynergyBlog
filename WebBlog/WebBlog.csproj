@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\images\comment.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

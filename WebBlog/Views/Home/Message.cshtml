@@ -1,0 +1,50 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+@model Message 
+<div class="text-left message">
+    <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Model.User.Name</a>
+    <label>@Model.CreateDate.ToString("dd.MM.yyyy HH:mm")</label>
+    <br />
+    <label class="fw-bold fs-3">@Model.Title</label>
+    <br />
+    <label class="message-text">@Model.Text</label>
+    <br />
+    <label class="fw-light fw-italic">@($"Тэги: {@Model.Tags}")</label>
+    <br />
+</div>
+@if ((bool)ViewData["IsHaveUser"] == true)
+{
+    <div class="text-center">
+        <h3>Написать комментарий</h3>
+        <form method='post' action='CreateComment' class="text-center">
+            <input type="hidden" name="messageId" value="@Model.Id"/>
+            <div>
+                <textarea name="textComment" cols="60" rows="5" placeholder="Текст комментария" required></textarea>
+            </div>
+            <br>
+            <div>
+                <input type="submit" value='Отправить' />
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h4>Для комментирования необходимо войти в учётную запись</h4>
+    </div>
+}
+<div class="text-left">
+    <label>Комментариев: @Model.Comments.Count</label>
+</div>
+<div class="text-left">
+    @foreach (var comment in Model.Comments)
+    {
+        <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">@comment.User.Name</a>
+        <label>@comment.CreateDate.ToString("dd.MM.yyyy HH:mm")</label>
+        <br />
+        <label class="message-text">@comment.Text</label>
+        <br />
+    }
+</div>
