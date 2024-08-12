@@ -9,11 +9,11 @@ namespace WebBlog.Models
         [Required]
         public User Creator { get; set; }
         [ForeignKey("Creator")]
-        public Guid CreatorId { get; set; }
+        public int CreatorId { get; set; }
         [Required]
         public User Target { get; set; }
         [ForeignKey("Target")]
-        public Guid TargetId { get; set; }
+        public int TargetId { get; set; }
         public Subscribe()
         {
 

@@ -7,7 +7,7 @@ namespace WebBlog.Models
     {
         public int Id { get; set; }
         [ForeignKey("User")]
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         [Required]
         public User User { get; set; }
         [Required]
@@ -22,6 +22,8 @@ namespace WebBlog.Models
         public bool IsSelfMessage { get; set; }
         [NotMapped]
         public bool IsHaveSubscribe { get; set; }
+        [NotMapped]
+        public string TagsString { get => string.Join(' ', Tags.Select(t => $"#{t.Name}"));  }
         public Message()
         {
             Comments = new List<Comment>();

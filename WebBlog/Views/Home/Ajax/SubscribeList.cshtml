@@ -24,7 +24,7 @@
             <img src="/images/comment.png" />
             <label class="text-dark text-decoration-underline" onclick="@($"document.location='/Home/Message?id={um.Message.Id}'")"> @($"Комментарии ({um.Message.Comments.Count})") </label>
             <img src="/images/subscribe.png" />
-            <label class="text-dark text-decoration-underline" onclick="UnSubscribe(this, @um.Message.Id)"> Отписаться от автора </label>
+                <label class="text-dark text-decoration-underline" name="@($"btn_subsc_{um.User.Id}")" onclick="UnSubscribe(@um.User.Id)"> Отписаться от автора </label>
             }
             else
             {

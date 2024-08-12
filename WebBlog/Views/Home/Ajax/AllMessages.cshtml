@@ -5,7 +5,7 @@
 @{
     foreach (var message in Model)
     {
-        <div class="text-left message">
+        <div class="text-left message" id="@($"div_message_{message.Id}")">
             <a class="text-dark" href="@($"/Home/Filter?filterUser={message.User.Name}&filterTags=")">@message.User.Name</a>
             <label>@message.CreateDate.ToString("dd.MM.yyyy HH:mm")</label>
             <br />
@@ -24,20 +24,20 @@
             @if (message.IsSelfMessage)
             {
                 <img src="/images/redact.png" />
-                <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Редактировать</a>
+                <label class="text-dark text-decoration-underline" onclick="@($"document.location='/Home/ChangeMessage?messageId={message.Id}'")">Редактировать</label>
                 <img src="/images/delete.png" />
-                <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Удалить</a>
+                <label class="text-dark text-decoration-underline" onclick="DeleteMessage(@message.Id)">Удалить</label>
             }
             else
             {
                 <img src="/images/subscribe.png" />
                 @if (message.IsHaveSubscribe)
                 {
-                    <label class="text-dark text-decoration-underline" onclick="UnSubscribe(this, @message.Id)"> Отписаться от автора </label>
+                    <label class="text-dark text-decoration-underline" name="@($"btn_subsc_{message.User.Id}")" onclick="UnSubscribe(@message.User.Id)"> Отписаться от автора </label>
                 }
                 else
                 {
-                    <label class="text-dark text-decoration-underline" onclick="Subscribe(this, @message.Id)"> Подписаться на автора </label>
+                    <label class="text-dark text-decoration-underline" name="@($"btn_subsc_{message.User.Id}")" onclick="Subscribe(@message.User.Id)"> Подписаться на автора </label>
                 }
             }
         </div>

@@ -6,25 +6,33 @@
 }
 @model Message
 <div class="text-center">
-    <h1 class="display-4">Создание нового поста</h1>
+    <h1 class="display-4">@(Model is null?"Создание нового поста":"Редактирование поста")</h1>
 </div>
 <div class="text-center">
-        <textarea id="Title" cols="60" rows="1" placeholder="Заголовок" required></textarea>
+        <textarea id="Title" cols="60" rows="1" placeholder="Заголовок" required>@Model?.Title</textarea>
 </div>
 <br>
 <div class="text-center">
-    <textarea id="Text" cols="60" rows="5" placeholder="Текст" required></textarea>
+    <textarea id="Text" cols="60" rows="5" placeholder="Текст" required>@Model?.Text</textarea>
 </div>
     <div class="text-center">
-        <textarea id="Tags" cols="60" rows="1" placeholder="Тэги"></textarea>
+        <textarea id="Tags" cols="60" rows="1" placeholder="Тэги">@Model?.TagsString</textarea>
     </div>
 
 <div class="text-center">
     <label>Скрытый</label>
-    <input type="checkbox" id="IsHidden"/>
+    @if (Model?.IsHidden == true)
+    {
+        <input type="checkbox" id="IsHidden" checked/>
+    }
+    else
+    {
+        <input type="checkbox" id="IsHidden" />
+    }
+
     
 </div>
 <br>
 <div class="text-center">
-    <input type="button" value='Создать' onclick="CreateMessage()" />
+    <input type="button" value='@(Model is null?"Создать":"Редактировать")' onclick='@(Model is null?"CreateMessage()":$"ChangeMessage({Model.Id})")' />
 </div>

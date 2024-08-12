@@ -9,7 +9,7 @@ namespace WebBlog.Models
         [Required]
         public User User { get; set; }
         [ForeignKey("User")]
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public Message Message { get; set; }
         [ForeignKey("Message")]
         public int MessageId { get; set; }

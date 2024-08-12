@@ -70,42 +70,36 @@ function ShowFilter() {
         }
     });
 }
-function Subscribe(button, messageId) {
-    $.post('/Home/Subscribe', { 'messageId': messageId }, function (data) {
+function Subscribe(userId) {
+    $.post('/Home/Subscribe', { 'userId': userId }, function (data) {
         if (data.length == 0) {
-            button.innerHTML = 'Отписаться от автора'
+            var selector = `label[name="btn_subsc_${userId}"]`;
+            $(selector).html('Отписаться от автора');
+            $(selector).attr("onclick",`UnSubscribe(${userId})`)
         }
         else {
             alert(data);
         }
     });
 }
-function UnSubscribe(button, messageId) {
-    $.post('/Home/UnSubscribe', { 'messageId': messageId }, function (data) {
+function UnSubscribe(userId) {
+    $.post('/Home/UnSubscribe', { 'userId': userId }, function (data) {
         if (data.length == 0) {
-            button.innerHTML = 'Подписаться на автора'
+            var selector = `label[name="btn_subsc_${userId}"]`;
+            $(selector).html('Подписаться на автора');
+            $(selector).attr('onclick', `Subscribe(${userId})`)
         }
         else {
             alert(data);
         }
     });
 }
-    function ShowMySubscribes() {
-        $.post('/Home/GetMySubscribes', { 'page': page }, function (data) {
-            if (data.length != 0) {
-                $("#subscribeList").append(data);
-                page += 1;
-            }
-            else {
-                $('#nextPage').hide();
-            }
-        });
-}
+
 function CreateMessage() {
     var title = document.getElementById("Title").value;
     var text = document.getElementById("Text").value;
     var tags = document.getElementById("Tags").value;
-    var isHidden = document.getElementById("IsHidden").value;
+    var isHidden = document.getElementById("IsHidden").checked;
     $.post('/Home/CreateMessage', { 'title': title, 'Text':text, 'IsHidden':isHidden, 'Tags':tags }, function (data) {
         if (data.length != 0) {
             alert(data);
@@ -114,5 +108,29 @@ function CreateMessage() {
             window.location.replace('/Home/MyMessages');
         }
     });
-
+}
+function DeleteMessage(messageId) {
+    $.post('/Home/DeleteMessage', { 'messageId': messageId}, function (data) {
+        if (data.length != 0) {
+            alert(data);
+        }
+        else {
+            var selector = `#div_message_${messageId}`;
+            $(selector).html('');
+        }
+    });
+}
+function ChangeMessage(messageId) {
+    var title = document.getElementById("Title").value;
+    var text = document.getElementById("Text").value;
+    var tags = document.getElementById("Tags").value;
+    var isHidden = document.getElementById("IsHidden").checked;
+    $.post('/Home/ChangeMessage', { 'title': title, 'Text': text, 'IsHidden': isHidden, 'Tags': tags, 'messageId': messageId }, function (data) {
+        if (data.length != 0) {
+            alert(data);
+        }
+        else {
+            window.location.replace('/Home/MyMessages');
+        }
+    });
 }

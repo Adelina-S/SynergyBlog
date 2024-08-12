@@ -28,9 +28,9 @@ namespace WebBlog.Database
             //modelBuilder.Entity<Subscribe>().HasOne(t=>t.Creator).WithMany().OnDelete(DeleteBehavior.Restrict);
             //modelBuilder.Entity<Subscribe>().HasOne(t=>t.Target).WithMany().OnDelete(DeleteBehavior.Restrict);
 
-            User adelina = new User("Adelina", "Synergy", "Аделина");
-            User jack = new User("Jack", "123", "Евгений");
-            User vika = new User("Vika", "123", "Виктория");
+            User adelina = new User("Adelina", "Synergy", "Аделина") { Id=1};
+            User jack = new User("Jack", "123", "Евгений") { Id=2};
+            User vika = new User("Vika", "123", "Виктория") { Id=3};
             modelBuilder.Entity<User>().HasData(new User[] { adelina, jack, vika });
 
             //modelBuilder.Entity<User>().Navigation(t => t.Subscribes).AutoInclude();
@@ -61,25 +61,58 @@ namespace WebBlog.Database
                 User result = Users.FirstOrDefault(user => user.Login == login);
                 return result;
         }
+        public User GetUser(int userId)
+        {
+                User result = Users.FirstOrDefault(user => user.Id == userId);
+                return result;
+        }
         //Метод, который добавляет в базу данных новый пост и тэги поста
         public void CreateMessage(string Title, string Text, List<string> tagsList, bool IsHidden, User user)
         {
             var message = new Message(user, Title, Text, IsHidden);
-            var sameTags = Tags.Where(t => tagsList.Contains(t.Name)).ToList();
-            if (sameTags.Count!=tagsList.Count)
+            var sameTags = Tags.Where(t => tagsList.Contains(t.Name)).ToList(); //Уже существующие в бд тэги
+            message.Tags.AddRange(sameTags);
+            foreach (var tagName in tagsList.Where(t=>sameTags.Select(s=>s.Name).Contains(t)==false))
             {
-                var sameTagsNames = sameTags.Select(t => t.Name).ToList();
-                foreach (string tagName in tagsList.Where(t=>sameTagsNames.Contains(t)==false))
-                {
-                    Tag tag=new Tag(tagName);
-                    tag.Messages.Add(message);
-                    Tags.Add(tag);
-                }
+                Tag tag = new Tag(tagName);
+                message.Tags.Add(tag);
             }
-            foreach (var tag in sameTags)
-                tag.Messages.Add(message);
-            //Messages.Add(message);
+            Messages.Add(message);
             SaveChanges();
+        }
+        //Удаляет пост
+        public string DeleteMessage(int messageId, User user)
+        {
+            var message = Messages.FirstOrDefault(t => t.Id == messageId);
+            if (message == null) return "Пост не существует";
+            if (message.User != user) return "У вас нет прав на удаление этого поста";
+            Messages.Remove(message);
+            SaveChanges();
+            return "";
+        }
+        //Метод, который изменяет в базе данных пост и тэги поста
+        public string ChangeMessage(string Title, string Text, List<string> tagsList, bool IsHidden, User user, int messageId)
+        {
+            var message = GetMessage(messageId);
+            if (message == null) return "Пост не существует";
+            if (message.User != user) return "У вас нет прав на редактирование этого поста";
+            message.Title= Title; message.Text= Text; message.IsHidden= IsHidden;
+
+            List<Tag> forRemove = new List<Tag>();
+            foreach (Tag tag in message.Tags)
+            {
+                if (tagsList.Contains(tag.Name)) { tagsList.Remove(tag.Name); continue; }
+                else { forRemove.Add(tag); continue; }
+            }
+            foreach (var removeTag in forRemove)
+                message.Tags.Remove(removeTag);
+            foreach (string tagName in tagsList)
+            {
+                Tag tag = new Tag(tagName);
+                message.Tags.Add(tag);
+            }
+            SaveChanges();
+            return "";
         }
         //Метод возвращает все посты пользователя из базы
         public List<Message> GetMessages(User user, int page)
@@ -164,6 +197,8 @@ namespace WebBlog.Database
         //Добавляет новую подписку
         public void AddSubscribe(User user, User target)
         {
+            if (Subscribes.FirstOrDefault(t => t.Creator == user && t.Target == target) != null) 
+                return;
             var subscribe=new Subscribe(user, target);
             Subscribes.Add(subscribe);
             SaveChanges();
@@ -173,7 +208,7 @@ namespace WebBlog.Database
         {
             var subscribe = Subscribes.FirstOrDefault(t=>t.Creator== user && t.Target == target);
             if (subscribe != null) 
-            Subscribes.Remove(subscribe);
+                Subscribes.Remove(subscribe);
             SaveChanges();
         }
         //Возвращает список пользователей на которые подписан человек и их последние сообщения

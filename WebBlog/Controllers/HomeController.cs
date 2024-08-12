@@ -110,13 +110,41 @@ namespace WebBlog.Controllers
             Database.CreateMessage(Title, Text, tagsList, IsHidden, User);
             return "";
         }
+        [HttpPost]
+        [Authorize]
+        public string DeleteMessage(int messageId)
+        {
+            CheckUser();
+            return Database.DeleteMessage(messageId, User);
+        }
+        [HttpGet, Authorize]
+        public IActionResult ChangeMessage(int messageId)
+        {
+            CheckUser();
+            var message=Database.GetMessage(messageId);
+            if (message == null)
+                return View("Error", "Пост не найден или удалён");
+            if (message.User!=User)
+                return View("Error", "У вас нет прав на редактирование этого поста");
+            return View("CreateMessage", message);
+        }
+        [HttpPost, Authorize]
+        public string ChangeMessage(string Title, string Text, bool IsHidden, string Tags, int messageId)
+        {
+            CheckUser();
+            List<string> tagsList = null;
+            var splitResult = Common.SplitTags(Tags, out tagsList);
+            if (string.IsNullOrEmpty(splitResult) == false)
+                return splitResult;
+            return Database.ChangeMessage(Title, Text, tagsList, IsHidden, User, messageId);
+        }
         [HttpGet]
         public IActionResult Message (int id)
         {
             CheckUser();
             var message=Database.GetMessage(id);
             if (message == null)
-                return View("Error", "Сообщение не найдено или удалено");
+                return View("Error", "Пост не найден или удалён");
             return View("Message", message);
         }
         [HttpPost, Authorize]
@@ -131,28 +159,28 @@ namespace WebBlog.Controllers
         }
         //Метод добавляет подписку на автора поста
         [HttpPost, Authorize]
-        public string Subscribe(int messageId)
+        public string Subscribe(int userId)
         {
             CheckUser();
-            var message = Database.GetMessage(messageId);
-            if (message == null)
-                return "Сообщение не найдено или удалено";
-            if (User == message.User)
+            var target = Database.GetUser(userId);
+            if (target == null)
+                return "Пользователь не найден или удален";
+            if (User == target)
                 return "Невозможно подписаться на себя";
-            Database.AddSubscribe(User, message.User);
+            Database.AddSubscribe(User, target);
             return "";
         }
         //Метод снимает подписку на автора поста
         [HttpPost, Authorize]
-        public string UnSubscribe(int messageId)
+        public string UnSubscribe(int userId)
         {
             CheckUser();
-            var message = Database.GetMessage(messageId);
-            if (message == null)
-                return "Сообщение не найдено или удалено";
-            if (User == message.User)
+            var target = Database.GetUser(userId);
+            if (target == null)
+                return "Пользователь не найден или удален";
+            if (User == target)
                 return "Невозможно отписаться на себя";
-            Database.RemoveSubscribe(User, message.User);
+            Database.RemoveSubscribe(User, target);
             return "";
         }
         //Метод возвращает страницу с подписками
