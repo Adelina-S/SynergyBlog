@@ -10,7 +10,11 @@
     <br />
     <label class="message-text">@Model.Text</label>
     <br />
-    <label class="fw-light fw-italic">@($"Тэги: {@Model.Tags}")</label>
+    <label class="fw-light fw-italic">@($"Тэги: ")</label>
+    @foreach (var tag in Model.Tags)
+    {
+        <a class="text-dark" href="@($"/Home/Filter?filterUser=&filterTags={tag.Name}")">@($"#{tag.Name}")</a>
+    }
     <br />
 </div>
 @if ((bool)ViewData["IsHaveUser"] == true)

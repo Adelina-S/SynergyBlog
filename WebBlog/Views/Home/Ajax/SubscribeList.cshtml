@@ -6,7 +6,8 @@
     foreach (var um in Model)
     {
         <div class="text-left message">
-            <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">@um.User.Name</a>
+            <a class="text-dark" href="@($"/Home/Filter?filterUser={um.User.Name}&filterTags=")">@um.User.Name</a>
+            // <a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">@um.User.Name</a>
             @if (um.Message!=null)
             {
             <label>@um.Message.CreateDate.ToString("dd.MM.yyyy HH:mm")</label>

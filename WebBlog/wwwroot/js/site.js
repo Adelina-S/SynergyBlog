@@ -94,7 +94,17 @@ function UnSubscribe(userId) {
         }
     });
 }
-
+function ShowMySubscribes() {
+    $.post('/Home/GetMySubscribes', { 'page': page }, function (data) {
+        if (data.length != 0) {
+            $("#subscribeList").append(data);
+            page += 1;
+        }
+        else {
+            $('#nextPage').hide();
+        }
+    });
+}
 function CreateMessage() {
     var title = document.getElementById("Title").value;
     var text = document.getElementById("Text").value;

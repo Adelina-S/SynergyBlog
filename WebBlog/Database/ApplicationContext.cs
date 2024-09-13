@@ -224,8 +224,8 @@ namespace WebBlog.Database
                   .Take(20)
                   .ToList();
             var messages = from m in Messages
-                         group m by m.UserId into g
-                         select g.OrderByDescending(x => x.CreateDate).FirstOrDefault();
+                           group m by m.UserId into g
+                           select g.OrderByDescending(x => x.CreateDate).FirstOrDefault();
             return users.Join(messages, u => u.Id, m => m.UserId, (u, m) => new UserWithMessage { User = u, Message = m }).ToList();
 
 
